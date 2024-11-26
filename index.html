@@ -12,17 +12,28 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            position: relative; /* Add position relative for the video */
+        }
+
+        .background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1; /* Ensure the video stays behind other content */
         }
 
         .kurukurukurukurukuru {
             display: inline-block;
             text-align: center;
             animation: rotate 2s linear infinite;
+            z-index: 1; /* Ensure the div stays above the video */
         }
 
         img {
-            border: 2em solid rgb(32, 32, 32);
-            border-radius: 2em;
+            width: 17em;
         }
 
         h3 {
@@ -42,6 +53,10 @@
     </style>
 </head>
 <body>
+    <video class="background-video" autoplay muted loop>
+        <source src="video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
     <div class="kurukurukurukurukuru">
         <img src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
         <h3>kurukurukurukurukurukurukuru...</h3>
