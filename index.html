@@ -53,7 +53,7 @@
     </style>
 </head>
 <body>
-    <video class="background-video" autoplay loop>
+    <video class="background-video" autoplay loop muted>
         <source src="video.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -62,8 +62,17 @@
         <h3>kurukurukurukurukurukurukuru...</h3>
         <a href="https://www.youtube.com/watch?v=Sy7-_uj125w">https://www.youtube.com/watch?v=Sy7-_uj125w</a>
     </div>
+    <input id="unmuteButton" type="button" value="UNMUTE THE AUDIOOOOOO 🔥🔥🔥🔥" onclick="toggleMute();" />
 </body>
 <script>
     document.getElementById('vid').play();
+
+    function toggleMute() {
+
+        var video=document.getElementById("myVideo");
+
+        video.muted = !video.muted;
+
+    }
 </script>
 </html>
