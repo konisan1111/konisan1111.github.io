@@ -53,8 +53,8 @@
     </style>
 </head>
 <body>
-    <video class="background-video" autoplay loop muted>
-        <source id="lmfaooooo" src="video.mp4" type="video/mp4">
+    <video id="lmfaooooo" class="background-video" autoplay loop muted>
+        <source src="video.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     <div class="kurukurukurukurukuru">
@@ -66,11 +66,9 @@
 </body>
 <script>
     function toggleMute() {
-
-        var video=document.getElementById("lmfaooooo");
-
-        video.muted = !video.muted;
-
+        var video = document.getElementById("lmfaooooo");
+        video.muted = false;
+        video.volume = 1;
     }
 </script>
 </html>
