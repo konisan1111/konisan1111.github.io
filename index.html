@@ -17,6 +17,7 @@
       color: white;
       font-family: "Poppins", sans-serif;
     }
+
     .background-video {
       position: fixed;
       top: 0;
@@ -31,6 +32,7 @@
     .background-video.active {
       opacity: 1;
     }
+
     .kurukuru {
       display: none;
       flex-direction: column;
@@ -38,9 +40,9 @@
       margin-top: 2em;
     }
     .kurukuru img {
-      width: 10em;
+      width: 15em;
       filter: drop-shadow(0 0 15px #ff0099);
-      transition: transform 0.05s linear;
+      transition: transform 0.1s ease-out;
     }
     .kurukuru h3 {
       margin-top: 1em;
@@ -57,6 +59,7 @@
     .kurukuru a:hover {
       color: #ff66cc;
     }
+
     .intro {
       z-index: 2;
       text-align: center;
@@ -92,6 +95,7 @@
 
   <video id="memeVideo" class="background-video" autoplay loop muted>
     <source src="video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
 
   <div class="kurukuru" id="kurukuru">
@@ -106,23 +110,30 @@
     const intro = document.getElementById("intro");
     const kurukuru = document.getElementById("kurukuru");
     const boomImg = document.getElementById("boomImg");
+
     let audioContext, analyser, dataArray;
 
     button.addEventListener("click", async () => {
       video.classList.add("active");
       video.muted = false;
       video.volume = 1;
+
       intro.style.display = "none";
       kurukuru.style.display = "flex";
+
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        await audioContext.resume();
+        await audioContext.resume(); // some browsers need explicit resume on user gesture
+
         const source = audioContext.createMediaElementSource(video);
         analyser = audioContext.createAnalyser();
         analyser.fftSize = 256;
-        dataArray = new Uint8Array(analyser.frequencyBinCount);
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
         source.connect(analyser);
         analyser.connect(audioContext.destination);
+
         animateBoom();
       }
     });
@@ -130,14 +141,18 @@
     function animateBoom() {
       requestAnimationFrame(animateBoom);
       analyser.getByteFrequencyData(dataArray);
+
+      // Take bass frequencies
       let bass = 0;
-      for (let i = 10; i < 40; i++) {
+      for (let i = 0; i < 10; i++) {
         bass += dataArray[i];
       }
-      bass = bass / 30;
-      let scale = 1 + bass / 40;
-      scale = Math.min(scale, 2.0);
-      let rotation = performance.now() / 20;
+      bass = bass / 10;
+
+      // Scale based on bass intensity
+      let scale = 1 + bass / 200; // adjust for sensitivity
+      let rotation = (performance.now() / 20) % 360;
+
       boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
     }
   </script>
