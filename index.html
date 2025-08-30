@@ -1,74 +1,151 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurukurukurukurukurukurukurukurukuru and so oooon kurukurukurukurukuru</title>
-    <style>
-        body {
-            background-color: rgb(20, 20, 20);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            position: relative;
-        }
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>You clicked did ya?</title>
 
-        .background-video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
+  <style>
 
-        .kurukurukurukurukuru {
-            display: inline-block;
-            text-align: center;
-            animation: rotate 2s linear infinite;
-            z-index: 1;
-        }
-
-        img {
-            width: 17em;
-        }
-
-        h3 {
-            color: white;
-            font-weight: 600;
-            margin-top: 1em;
-        }
-
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-</head>
-<body>
-    <video id="lmfaooooo" class="background-video" autoplay loop muted>
-        <source src="video.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <div class="kurukurukurukurukuru">
-        <img src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
-        <h3>kurukurukurukurukurukurukuru...</h3>
-        <a href="https://www.youtube.com/watch?v=Sy7-_uj125w">https://www.youtube.com/watch?v=Sy7-_uj125w</a>
-    </div>
-    <input style="margin-top:30em; position: absolute;" id="unmuteButton" type="button" value="UNMUTE THE AUDIOOOOOO 🔥🔥🔥🔥" onclick="toggleMute();" />
-</body>
-<script>
-    function toggleMute() {
-        var video = document.getElementById("lmfaooooo");
-        video.muted = false;
-        video.volume = 1;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
     }
-</script>
+
+    body {
+      background-color: rgb(15, 15, 15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      overflow: hidden;
+      text-align: center;
+      color: white;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .background-video.active {
+      opacity: 1;
+    }
+
+    .kurukuru {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 2em;
+      animation: fadeIn 1.5s ease forwards;
+    }
+    .kurukuru img {
+      width: 15em;
+      animation: rotate 2s linear infinite;
+      filter: drop-shadow(0 0 15px #ff0099);
+    }
+    .kurukuru h3 {
+      margin-top: 1em;
+      font-size: 1.5em;
+      font-weight: bold;
+      text-shadow: 0 0 10px #ff66cc;
+    }
+    .kurukuru a {
+      margin-top: 0.5em;
+      color: #00e5ff;
+      text-decoration: none;
+      font-size: 1.1em;
+      transition: color 0.3s;
+    }
+    .kurukuru a:hover {
+      color: #ff66cc;
+    }
+
+    .intro {
+      z-index: 2;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+    .intro h2 {
+      font-size: 2em;
+      margin-bottom: 1em;
+      text-shadow: 0 0 10px #00e5ff;
+    }
+    #unmuteButton {
+      padding: 1em 2em;
+      font-size: 1.2em;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(45deg, #ff0099, #00e5ff);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 0, 153, 0.7);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    #unmuteButton:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.9);
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="intro" id="intro">
+    <h2>Press the button 👇</h2>
+    <button id="unmuteButton">UNMUTE THE AUDIO 🔥🔥🔥</button>
+  </div>
+
+  <video id="memeVideo" class="background-video" autoplay loop muted>
+    <source src="video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="kurukuru" id="kurukuru">
+    <img src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
+    <h3>kurukurukurukurukurukurukuru...</h3>
+    <a href="https://www.youtube.com/watch?v=Sy7-_uj125w" target="_blank">Watch on YouTube</a>
+  </div>
+
+  <script>
+
+    const video = document.getElementById("memeVideo");
+        const button = document.getElementById("unmuteButton");
+            const intro = document.getElementById("intro");
+                const kurukuru = document.getElementById("kurukuru");
+
+    button.addEventListener("click", () => {
+
+      video.classList.add("active");
+      video.muted = false;
+      video.volume = 1;
+
+      intro.style.display = "none";
+
+      kurukuru.style.display = "flex";
+    });
+  </script>
+</body>
 </html>
