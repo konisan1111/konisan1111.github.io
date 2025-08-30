@@ -5,13 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>You clicked did ya?</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-    }
-
     body {
       background-color: rgb(15, 15, 15);
       display: flex;
@@ -22,6 +15,7 @@
       overflow: hidden;
       text-align: center;
       color: white;
+      font-family: "Poppins", sans-serif;
     }
 
     .background-video {
@@ -44,11 +38,9 @@
       flex-direction: column;
       align-items: center;
       margin-top: 2em;
-      animation: fadeIn 1.5s ease forwards;
     }
     .kurukuru img {
       width: 15em;
-      animation: rotate 2s linear infinite;
       filter: drop-shadow(0 0 15px #ff0099);
       transition: transform 0.1s ease-out;
     }
@@ -63,7 +55,6 @@
       color: #00e5ff;
       text-decoration: none;
       font-size: 1.1em;
-      transition: color 0.3s;
     }
     .kurukuru a:hover {
       color: #ff66cc;
@@ -72,7 +63,6 @@
     .intro {
       z-index: 2;
       text-align: center;
-      animation: fadeIn 1s ease forwards;
     }
     .intro h2 {
       font-size: 2em;
@@ -94,15 +84,6 @@
     #unmuteButton:hover {
       transform: scale(1.1);
       box-shadow: 0 0 25px rgba(0, 229, 255, 0.9);
-    }
-
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -130,24 +111,23 @@
     const kurukuru = document.getElementById("kurukuru");
     const boomImg = document.getElementById("boomImg");
 
-    let audioContext, analyser, source, dataArray;
+    let audioContext, analyser, dataArray;
 
-    button.addEventListener("click", () => {
-
+    button.addEventListener("click", async () => {
       video.classList.add("active");
       video.muted = false;
       video.volume = 1;
 
       intro.style.display = "none";
-
       kurukuru.style.display = "flex";
 
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        source = audioContext.createMediaElementSource(video);
+        await audioContext.resume(); // some browsers need explicit resume on user gesture
+
+        const source = audioContext.createMediaElementSource(video);
         analyser = audioContext.createAnalyser();
         analyser.fftSize = 256;
-
         const bufferLength = analyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
 
@@ -160,17 +140,20 @@
 
     function animateBoom() {
       requestAnimationFrame(animateBoom);
-
       analyser.getByteFrequencyData(dataArray);
 
+      // Take bass frequencies
       let bass = 0;
       for (let i = 0; i < 10; i++) {
         bass += dataArray[i];
       }
       bass = bass / 10;
 
-      let scale = 1 + bass / 150;
-      boomImg.style.transform = `scale(${scale}) rotate(${performance.now() / 2}deg)`;
+      // Scale based on bass intensity
+      let scale = 1 + bass / 200; // adjust for sensitivity
+      let rotation = (performance.now() / 20) % 360;
+
+      boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
     }
   </script>
 </body>
