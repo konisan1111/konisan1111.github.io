@@ -40,9 +40,10 @@
       margin-top: 2em;
     }
     .kurukuru img {
-      width: 8em; /* smaller base size */
+      width: 10em; /* nice base size */
       filter: drop-shadow(0 0 15px #ff0099);
-      transition: transform 0.05s ease-out;
+      animation: spin 4s linear infinite; /* continuous smooth rotation */
+      transition: transform 0.1s ease-out;
     }
     .kurukuru h3 {
       margin-top: 1em;
@@ -85,6 +86,11 @@
       transform: scale(1.1);
       box-shadow: 0 0 25px rgba(0, 229, 255, 0.9);
     }
+
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -112,7 +118,6 @@
     const boomImg = document.getElementById("boomImg");
 
     let audioContext, analyser, dataArray;
-    let rotation = 0; // keep track of rotation
 
     button.addEventListener("click", async () => {
       video.classList.add("active");
@@ -129,8 +134,7 @@
         const source = audioContext.createMediaElementSource(video);
         analyser = audioContext.createAnalyser();
         analyser.fftSize = 256;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
 
         source.connect(analyser);
         analyser.connect(audioContext.destination);
@@ -143,22 +147,19 @@
       requestAnimationFrame(animateBoom);
       analyser.getByteFrequencyData(dataArray);
 
-      // Bass = average of first ~15 frequencies
+      // Take lower-mid bass range (bins 10–40)
       let bass = 0;
-      for (let i = 0; i < 15; i++) {
+      for (let i = 10; i < 40; i++) {
         bass += dataArray[i];
       }
-      bass = bass / 15;
+      bass = bass / 30;
 
-      // Scale based on bass (clamped between 1 and 2.5)
-      let scale = 1 + bass / 60;
-      scale = Math.min(scale, 2.5);
+      // Make scale more sensitive
+      let scale = 1 + bass / 50;
+      scale = Math.min(scale, 2.0); // clamp so it never explodes
 
-      // Rotate smoothly
-      rotation += 2; // degrees per frame
-      if (rotation > 360) rotation -= 360;
-
-      boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+      // Apply scale on top of rotation (CSS handles spin)
+      boomImg.style.transform = `scale(${scale})`;
     }
   </script>
 </body>
