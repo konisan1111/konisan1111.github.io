@@ -40,7 +40,7 @@
       margin-top: 2em;
     }
     .kurukuru img {
-      width: 10em; /* smaller image */
+      width: 8em; /* smaller base size */
       filter: drop-shadow(0 0 15px #ff0099);
       transition: transform 0.05s ease-out;
     }
@@ -112,6 +112,7 @@
     const boomImg = document.getElementById("boomImg");
 
     let audioContext, analyser, dataArray;
+    let rotation = 0; // keep track of rotation
 
     button.addEventListener("click", async () => {
       video.classList.add("active");
@@ -139,23 +140,26 @@
     });
 
     function animateBoom() {
-        requestAnimationFrame(animateBoom);
-        analyser.getByteFrequencyData(dataArray);
+      requestAnimationFrame(animateBoom);
+      analyser.getByteFrequencyData(dataArray);
 
-        // Bass = average of first ~15 frequencies
-        let bass = 0;
-        for (let i = 0; i < 15; i++) {
-            bass += dataArray[i];
-        }
-        bass = bass / 15;
+      // Bass = average of first ~15 frequencies
+      let bass = 0;
+      for (let i = 0; i < 15; i++) {
+        bass += dataArray[i];
+      }
+      bass = bass / 15;
 
-        // Stronger scaling (more sensitive)
-        let scale = 1 + bass / 80; 
-        let rotation = performance.now() / 20; // smooth continuous rotation
+      // Scale based on bass (clamped between 1 and 2.5)
+      let scale = 1 + bass / 60;
+      scale = Math.min(scale, 2.5);
 
-        boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+      // Rotate smoothly
+      rotation += 2; // degrees per frame
+      if (rotation > 360) rotation -= 360;
+
+      boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
     }
-
   </script>
 </body>
 </html>
