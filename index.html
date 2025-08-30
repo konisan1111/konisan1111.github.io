@@ -37,14 +37,10 @@
       align-items: center;
       margin-top: 2em;
     }
-    .spin-wrapper {
-      display: inline-block;
-      animation: spin 4s linear infinite;
-    }
     .kurukuru img {
       width: 10em;
       filter: drop-shadow(0 0 15px #ff0099);
-      transition: transform 0.1s ease-out;
+      transition: transform 0.05s linear;
     }
     .kurukuru h3 {
       margin-top: 1em;
@@ -86,10 +82,6 @@
       transform: scale(1.1);
       box-shadow: 0 0 25px rgba(0, 229, 255, 0.9);
     }
-    @keyframes spin {
-      0%   { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
   </style>
 </head>
 <body>
@@ -103,9 +95,7 @@
   </video>
 
   <div class="kurukuru" id="kurukuru">
-    <div class="spin-wrapper">
-      <img id="boomImg" src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
-    </div>
+    <img id="boomImg" src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
     <h3>kurukurukurukurukurukurukuru...</h3>
     <a href="https://www.youtube.com/watch?v=Sy7-_uj125w" target="_blank">Watch on YouTube</a>
   </div>
@@ -147,7 +137,8 @@
       bass = bass / 30;
       let scale = 1 + bass / 40;
       scale = Math.min(scale, 2.0);
-      boomImg.style.transform = `scale(${scale})`;
+      let rotation = performance.now() / 20;
+      boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
     }
   </script>
 </body>
