@@ -145,11 +145,10 @@
         for (let i = 0; i < 5; i++) {
             bass += dataArray[i];
         }
-        bass = bass / 5;
 
         // Much stronger pulsing
         let scale = 1 + bass / 25;  
-        if (scale > 2) scale = 2;   // optional safety cap
+        if (scale > 3) scale = 2;   // optional safety cap
 
         let rotation = performance.now() / 20;
         boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
