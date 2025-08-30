@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-
-    <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>You clicked did ya?</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You clicked did ya?</title>
   <style>
-
     * {
       margin: 0;
       padding: 0;
@@ -53,6 +50,7 @@
       width: 15em;
       animation: rotate 2s linear infinite;
       filter: drop-shadow(0 0 15px #ff0099);
+      transition: transform 0.1s ease-out;
     }
     .kurukuru h3 {
       margin-top: 1em;
@@ -106,13 +104,9 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
   </style>
-
 </head>
-
 <body>
-
   <div class="intro" id="intro">
     <h2>Press the button 👇</h2>
     <button id="unmuteButton">UNMUTE THE AUDIO 🔥🔥🔥</button>
@@ -124,17 +118,19 @@
   </video>
 
   <div class="kurukuru" id="kurukuru">
-    <img src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
+    <img id="boomImg" src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
     <h3>kurukurukurukurukurukurukuru...</h3>
     <a href="https://www.youtube.com/watch?v=Sy7-_uj125w" target="_blank">Watch on YouTube</a>
   </div>
 
   <script>
-
     const video = document.getElementById("memeVideo");
-        const button = document.getElementById("unmuteButton");
-            const intro = document.getElementById("intro");
-                const kurukuru = document.getElementById("kurukuru");
+    const button = document.getElementById("unmuteButton");
+    const intro = document.getElementById("intro");
+    const kurukuru = document.getElementById("kurukuru");
+    const boomImg = document.getElementById("boomImg");
+
+    let audioContext, analyser, source, dataArray;
 
     button.addEventListener("click", () => {
 
@@ -145,7 +141,37 @@
       intro.style.display = "none";
 
       kurukuru.style.display = "flex";
+
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        source = audioContext.createMediaElementSource(video);
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        animateBoom();
+      }
     });
+
+    function animateBoom() {
+      requestAnimationFrame(animateBoom);
+
+      analyser.getByteFrequencyData(dataArray);
+
+      let bass = 0;
+      for (let i = 0; i < 10; i++) {
+        bass += dataArray[i];
+      }
+      bass = bass / 10;
+
+      let scale = 1 + bass / 150;
+      boomImg.style.transform = `scale(${scale}) rotate(${performance.now() / 2}deg)`;
+    }
   </script>
 </body>
 </html>
