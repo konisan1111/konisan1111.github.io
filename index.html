@@ -136,21 +136,22 @@
       }
     });
 
-    function animateBoom() {
+   function animateBoom() {
         requestAnimationFrame(animateBoom);
         analyser.getByteFrequencyData(dataArray);
 
-        // Bass: first 10 bins
+        // Deep sub-bass (lowest ~5 bins)
         let bass = 0;
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 5; i++) {
             bass += dataArray[i];
         }
-        bass = bass / 10;
+        bass = bass / 5;
 
-        // Much more sensitive + stronger pulse
-        let scale = 1 + bass / 60; 
+        // Much stronger pulsing
+        let scale = 1 + bass / 25;  
+        if (scale > 3) scale = 3;   // optional safety cap
+
         let rotation = performance.now() / 20;
-
         boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
     }
 
