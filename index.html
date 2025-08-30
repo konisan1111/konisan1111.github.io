@@ -17,7 +17,6 @@
       color: white;
       font-family: "Poppins", sans-serif;
     }
-
     .background-video {
       position: fixed;
       top: 0;
@@ -32,17 +31,19 @@
     .background-video.active {
       opacity: 1;
     }
-
     .kurukuru {
       display: none;
       flex-direction: column;
       align-items: center;
       margin-top: 2em;
     }
+    .spin-wrapper {
+      display: inline-block;
+      animation: spin 4s linear infinite;
+    }
     .kurukuru img {
-      width: 10em; /* nice base size */
+      width: 10em;
       filter: drop-shadow(0 0 15px #ff0099);
-      animation: spin 4s linear infinite; /* continuous smooth rotation */
       transition: transform 0.1s ease-out;
     }
     .kurukuru h3 {
@@ -60,7 +61,6 @@
     .kurukuru a:hover {
       color: #ff66cc;
     }
-
     .intro {
       z-index: 2;
       text-align: center;
@@ -86,7 +86,6 @@
       transform: scale(1.1);
       box-shadow: 0 0 25px rgba(0, 229, 255, 0.9);
     }
-
     @keyframes spin {
       0%   { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
@@ -101,11 +100,12 @@
 
   <video id="memeVideo" class="background-video" autoplay loop muted>
     <source src="video.mp4" type="video/mp4">
-    Your browser does not support the video tag.
   </video>
 
   <div class="kurukuru" id="kurukuru">
-    <img id="boomImg" src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
+    <div class="spin-wrapper">
+      <img id="boomImg" src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
+    </div>
     <h3>kurukurukurukurukurukurukuru...</h3>
     <a href="https://www.youtube.com/watch?v=Sy7-_uj125w" target="_blank">Watch on YouTube</a>
   </div>
@@ -116,29 +116,23 @@
     const intro = document.getElementById("intro");
     const kurukuru = document.getElementById("kurukuru");
     const boomImg = document.getElementById("boomImg");
-
     let audioContext, analyser, dataArray;
 
     button.addEventListener("click", async () => {
       video.classList.add("active");
       video.muted = false;
       video.volume = 1;
-
       intro.style.display = "none";
       kurukuru.style.display = "flex";
-
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         await audioContext.resume();
-
         const source = audioContext.createMediaElementSource(video);
         analyser = audioContext.createAnalyser();
         analyser.fftSize = 256;
         dataArray = new Uint8Array(analyser.frequencyBinCount);
-
         source.connect(analyser);
         analyser.connect(audioContext.destination);
-
         animateBoom();
       }
     });
@@ -146,19 +140,13 @@
     function animateBoom() {
       requestAnimationFrame(animateBoom);
       analyser.getByteFrequencyData(dataArray);
-
-      // Take lower-mid bass range (bins 10–40)
       let bass = 0;
       for (let i = 10; i < 40; i++) {
         bass += dataArray[i];
       }
       bass = bass / 30;
-
-      // Make scale more sensitive
-      let scale = 1 + bass / 50;
-      scale = Math.min(scale, 2.0); // clamp so it never explodes
-
-      // Apply scale on top of rotation (CSS handles spin)
+      let scale = 1 + bass / 40;
+      scale = Math.min(scale, 2.0);
       boomImg.style.transform = `scale(${scale})`;
     }
   </script>
