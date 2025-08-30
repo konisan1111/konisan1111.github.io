@@ -40,9 +40,9 @@
       margin-top: 2em;
     }
     .kurukuru img {
-      width: 15em;
+      width: 10em; /* smaller image */
       filter: drop-shadow(0 0 15px #ff0099);
-      transition: transform 0.1s ease-out;
+      transition: transform 0.05s ease-out;
     }
     .kurukuru h3 {
       margin-top: 1em;
@@ -123,7 +123,7 @@
 
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        await audioContext.resume(); // some browsers need explicit resume on user gesture
+        await audioContext.resume();
 
         const source = audioContext.createMediaElementSource(video);
         analyser = audioContext.createAnalyser();
@@ -139,22 +139,23 @@
     });
 
     function animateBoom() {
-      requestAnimationFrame(animateBoom);
-      analyser.getByteFrequencyData(dataArray);
+        requestAnimationFrame(animateBoom);
+        analyser.getByteFrequencyData(dataArray);
 
-      // Take bass frequencies
-      let bass = 0;
-      for (let i = 0; i < 10; i++) {
-        bass += dataArray[i];
-      }
-      bass = bass / 10;
+        // Bass = average of first ~15 frequencies
+        let bass = 0;
+        for (let i = 0; i < 15; i++) {
+            bass += dataArray[i];
+        }
+        bass = bass / 15;
 
-      // Scale based on bass intensity
-      let scale = 1 + bass / 200; // adjust for sensitivity
-      let rotation = (performance.now() / 20) % 360;
+        // Stronger scaling (more sensitive)
+        let scale = 1 + bass / 80; 
+        let rotation = performance.now() / 20; // smooth continuous rotation
 
-      boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+        boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
     }
+
   </script>
 </body>
 </html>
