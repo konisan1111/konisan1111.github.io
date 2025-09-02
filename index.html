@@ -38,7 +38,7 @@
       margin-top: 2em;
     }
     .kurukuru img {
-        width: 6em;
+        width: 12em;
         filter: drop-shadow(0 0 15px #ff0099);
         transition: transform 0.05s linear;
     }
@@ -88,7 +88,7 @@
 <body>
   <div class="intro" id="intro">
     <h2>Do not click this button</h2>
-    <button id="unmuteButton">You really don't wanna press me buddy</button>
+    <button id="unmuteButton">You really don't wanna press me buddy...</button>
   </div>
 
   <video id="memeVideo" class="background-video" autoplay loop muted>
@@ -113,27 +113,13 @@
     let audioContext, analyser, dataArray;
 
     button.addEventListener("click", async () => {
-      
+
       video.classList.add("active");
       video.muted = false;
       video.volume = 1;
 
       intro.style.display = "none";
       kurukuru.style.display = "flex";
-
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        await audioContext.resume(); // some browsers need explicit resume on user gesture
-
-        const source = audioContext.createMediaElementSource(video);
-        analyser = audioContext.createAnalyser();
-        analyser.fftSize = 256;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
-
-        source.connect(analyser);
-        analyser.connect(audioContext.destination);
-      }
     });
 
   </script>
