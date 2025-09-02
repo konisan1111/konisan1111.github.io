@@ -87,13 +87,13 @@
 </head>
 <body>
   <div class="intro" id="intro">
-    <h2>Press the button 👇</h2>
-    <button id="unmuteButton">UNMUTE THE AUDIO 🔥🔥🔥</button>
+    <h2>Do not click this button</h2>
+    <button id="unmuteButton">You really don't wanna press me buddy</button>
   </div>
 
   <video id="memeVideo" class="background-video" autoplay loop muted>
     <source src="video.mp4" type="video/mp4">
-    Your browser does not support the video tag.
+    Your browser does not support the video tag buddy, get better XD.
   </video>
 
   <div class="kurukuru" id="kurukuru">
@@ -103,6 +103,7 @@
   </div>
 
   <script>
+
     const video = document.getElementById("memeVideo");
     const button = document.getElementById("unmuteButton");
     const intro = document.getElementById("intro");
@@ -112,6 +113,7 @@
     let audioContext, analyser, dataArray;
 
     button.addEventListener("click", async () => {
+      
       video.classList.add("active");
       video.muted = false;
       video.volume = 1;
@@ -131,29 +133,9 @@
 
         source.connect(analyser);
         analyser.connect(audioContext.destination);
-
-        animateBoom();
       }
     });
 
-   function animateBoom() {
-        requestAnimationFrame(animateBoom);
-        analyser.getByteFrequencyData(dataArray);
-
-        // Deep sub-bass (lowest ~5 bins)
-        let bass = 0;
-        for (let i = 0; i < 5; i++) {
-            bass += dataArray[i];
-        }
-        bass = bass / 5;
-
-        // Much stronger pulsing
-        let scale = 1 + bass / 25;  
-        if (scale > 3) scale = 2;   // optional safety cap
-
-        let rotation = performance.now() / 20;
-        boomImg.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
-    }
   </script>
   
 </body>
