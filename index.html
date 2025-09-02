@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>You clicked did ya?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
+      background-image: url('bg.png');
+      background-repeat: repeat;
+      background-size: 10em;
       background-color: rgb(15, 15, 15);
       display: flex;
       justify-content: center;
@@ -15,8 +19,19 @@
       overflow: hidden;
       text-align: center;
       color: white;
-      font-family: "Poppins", sans-serif;
+      font-family: "Fredoka", sans-serif;
     }
+        
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+      padding: 0 5%;
+      box-sizing: border-box;
+    }
+    
     .background-video {
       position: fixed;
       top: 0;
@@ -28,91 +43,162 @@
       opacity: 0;
       transition: opacity 1s ease-in-out;
     }
+
     .background-video.active {
-      opacity: 1;
-    }
-    .kurukuru {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 2em;
-    }
-    .kurukuru img {
-        width: 12em;
-        filter: drop-shadow(0 0 15px #ff0099);
-        transition: transform 0.05s linear;
-    }
-    .kurukuru h3 {
-      margin-top: 1em;
-      font-size: 1.5em;
-      font-weight: bold;
-      text-shadow: 0 0 10px #ff66cc;
-    }
-    .kurukuru a {
-      margin-top: 0.5em;
-      color: #00e5ff;
-      text-decoration: none;
-      font-size: 1.1em;
-    }
-    .kurukuru a:hover {
-      color: #ff66cc;
+      opacity: 0.5;
     }
 
     .intro {
       z-index: 2;
       text-align: center;
     }
+
     .intro h2 {
       font-size: 2em;
       margin-bottom: 1em;
-      text-shadow: 0 0 10px #00e5ff;
+      text-shadow: 0 0 10px rgba(132, 0, 255, 0.541);
     }
+
     #unmuteButton {
       padding: 1em 2em;
       font-size: 1.2em;
       font-weight: bold;
       border: none;
       border-radius: 50px;
-      background: linear-gradient(45deg, #ff0099, #00e5ff);
+      background: linear-gradient(45deg, #3a3a3a, #686868);
       color: white;
       cursor: pointer;
-      box-shadow: 0 0 15px rgba(255, 0, 153, 0.7);
+      box-shadow: 0 0 15px rgba(132, 0, 255, 0.541);
       transition: transform 0.2s ease, box-shadow 0.3s ease;
     }
     #unmuteButton:hover {
       transform: scale(1.1);
-      box-shadow: 0 0 25px rgba(0, 229, 255, 0.9);
+      box-shadow: 0 0 25px rgba(153, 0, 255, 0.726);
     }
+
+    .left-side {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+
+    .right-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      text-align: center;
+    }
+
+    .kurukuru {
+      display: none;
+      flex-direction: row;
+      width: 100%;
+    }
+
+    .kurukuru h3 {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 1em;
+      background: none;
+      text-shadow: 0 0 10px rgba(132, 0, 255, 0.541);
+    }
+
+    .kurukuru a {
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: 0.8em 1.6em;
+      border-radius: 50px;
+      background: linear-gradient(45deg, #ff0000, #cc0000);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    .kurukuru a:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+    }
+
+    .kurukuru img {
+      width: 20em;
+      filter: drop-shadow(0 0 15px #ff0099);
+      animation: rotate 4s linear infinite;
+    }
+
+    .pulse-wrapper {
+      animation: pulse 2s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      10% {
+        transform: scale(1.2);
+      }
+      20% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+}
   </style>
 </head>
+
 <body>
+
   <div class="intro" id="intro">
     <h2>Do not click this button</h2>
-    <button id="unmuteButton">You really don't wanna press me buddy...</button>
+      <button id="unmuteButton">You really don't wanna press me buddy...</button>
   </div>
 
   <video id="memeVideo" class="background-video" autoplay loop muted>
     <source src="video.mp4" type="video/mp4">
-    Your browser does not support the video tag buddy, get better XD.
+      Your browser does not support the video tag buddy, get better XD.
   </video>
 
   <div class="kurukuru" id="kurukuru">
-    <img id="boomImg" src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
-    <h3>kurukurukurukurukurukurukuru...</h3>
-    <a href="https://www.youtube.com/watch?v=Sy7-_uj125w" target="_blank">Watch on YouTube</a>
+    
+  <div class="container">
+    <div class="left-side">
+      <div class="pulse-wrapper">
+        <img id="boomImg" src="https://i.ibb.co/VMCLhKs/1732645885-r4-311460413358704864.png">
+      </div>
+    </div>
+    <div class="right-side">
+      <h3>kurukurukurukurukurukurukuru...</h3>
+        <a href="https://www.youtube.com/watch?v=Sy7-_uj125w" target="_blank">Watch on YouTube</a>
+    </div>
+
   </div>
+</div>
 
-  <script>
+<script>
 
-    const video = document.getElementById("memeVideo");
+  const video = document.getElementById("memeVideo");
     const button = document.getElementById("unmuteButton");
-    const intro = document.getElementById("intro");
-    const kurukuru = document.getElementById("kurukuru");
-    const boomImg = document.getElementById("boomImg");
+      const intro = document.getElementById("intro");
+        const kurukuru = document.getElementById("kurukuru");
+          const boomImg = document.getElementById("boomImg");
 
-    let audioContext, analyser, dataArray;
+  let audioContext, analyser, dataArray;
 
-    button.addEventListener("click", async () => {
+  button.addEventListener("click", async () => {
 
       video.classList.add("active");
       video.muted = false;
@@ -120,9 +206,10 @@
 
       intro.style.display = "none";
       kurukuru.style.display = "flex";
-    });
+    }
+);
 
-  </script>
+</script>
   
 </body>
 </html>
